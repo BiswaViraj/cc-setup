@@ -1,5 +1,5 @@
 {
-  "name": "cc-setup",
+  "name": "@biswaviraj/cc-setup",
   "version": "1.0.0",
   "description": "Interactive CLI to add Claude Code plugins & MCP servers to any project",
   "type": "module",
