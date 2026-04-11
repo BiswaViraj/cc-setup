@@ -4,7 +4,7 @@
   "description": "Add your preferred Claude Code plugins and MCP servers to any project in seconds",
   "type": "module",
   "bin": {
-    "cc-setup": "./dist/index.mjs"
+    "cc-setup": "./dist/index.js"
   },
   "scripts": {
     "build": "tsup",
