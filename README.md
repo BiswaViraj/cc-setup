@@ -4,20 +4,16 @@ Add your preferred Claude Code plugins and MCP servers to any project in seconds
 
 ![cc-setup demo](./demo.gif)
 
-```bash
-npx @biswaviraj/cc-setup
-```
-
 Pick what you need, choose the scope, done. No manual config editing.
 
 ## Install
 
 ```bash
 # Run directly
-npx @biswaviraj/cc-setup
+npx @biswaviraj/cc-setup@latest
 
 # Or install globally
-pnpm add -g @biswaviraj/cc-setup
+pnpm add -g @biswaviraj/cc-setup@latest
 cc-setup
 ```
 
@@ -52,22 +48,22 @@ Your entries are merged with the built-in list. No duplicates.
 
 ### Plugin fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `value` | yes | Unique ID |
-| `label` | yes | Display name |
-| `hint` | yes | Short description |
-| `install` | yes | Plugin install ID (e.g. `my-plugin` or `my-plugin@marketplace`) |
-| `marketplace` | no | GitHub `org/repo` for non-official marketplaces |
+| Field         | Required | Description                                                     |
+| ------------- | -------- | --------------------------------------------------------------- |
+| `value`       | yes      | Unique ID                                                       |
+| `label`       | yes      | Display name                                                    |
+| `hint`        | yes      | Short description                                               |
+| `install`     | yes      | Plugin install ID (e.g. `my-plugin` or `my-plugin@marketplace`) |
+| `marketplace` | no       | GitHub `org/repo` for non-official marketplaces                 |
 
 ### MCP Server fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `value` | yes | Unique ID |
-| `label` | yes | Display name |
-| `hint` | yes | Short description |
-| `command` | yes | The command to run (e.g. `npx my-mcp-server`) |
+| Field     | Required | Description                                   |
+| --------- | -------- | --------------------------------------------- |
+| `value`   | yes      | Unique ID                                     |
+| `label`   | yes      | Display name                                  |
+| `hint`    | yes      | Short description                             |
+| `command` | yes      | The command to run (e.g. `npx my-mcp-server`) |
 
 ## Quick mode
 
@@ -83,11 +79,11 @@ cc-setup --quick --scope local
 
 ## Scopes
 
-| Scope | Where | Use case |
-|-------|-------|----------|
-| `local` | `.claude/settings.local.json` | Just for you, this project |
-| `project` | `.claude/settings.json` | Shared with team (committed to git) |
-| `user` | `~/.claude/settings.json` | All projects on this machine |
+| Scope     | Where                         | Use case                            |
+| --------- | ----------------------------- | ----------------------------------- |
+| `local`   | `.claude/settings.local.json` | Just for you, this project          |
+| `project` | `.claude/settings.json`       | Shared with team (committed to git) |
+| `user`    | `~/.claude/settings.json`     | All projects on this machine        |
 
 ## How it works
 
