@@ -1,10 +1,18 @@
 # cc-setup
 
-Add your preferred Claude Code plugins and MCP servers to any project in seconds.
+Claude Code supports [plugins](https://docs.anthropic.com/en/docs/claude-code/plugins) (skills, hooks, agents) and [MCP servers](https://docs.anthropic.com/en/docs/claude-code/mcp-servers) — but adding them to a new project means remembering install IDs, setting up marketplaces, and running multiple CLI commands every time.
+
+`cc-setup` lets you **define your preferred tools once**, then add them to any project with a single command.
+
+1. Create `~/.cc-setup.json` with your go-to plugins and MCP servers
+2. Run `cc-setup` in any project
+3. Pick from your list, choose the scope, done
 
 ![cc-setup demo](./demo.gif)
 
-Pick what you need, choose the scope, done. No manual config editing.
+It ships with a small built-in list of popular plugins, but the real value is **your own curated list** — set it up once, reuse everywhere.
+
+Add your preferred Claude Code plugins and MCP servers to any project in seconds.
 
 ## Install
 
