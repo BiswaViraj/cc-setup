@@ -2,28 +2,10 @@
 
 Add your preferred Claude Code plugins and MCP servers to any project in seconds.
 
+![cc-setup demo](./demo.gif)
+
 ```bash
 npx @biswaviraj/cc-setup
-```
-
-```
-  cc-setup  v1.0.0
-
-  i  Claude Code 1.0.37
-
-  ? Pick tools to add
-  > Plugins
-    [ ] Superpowers       brainstorming, TDD, debugging, plans, worktrees
-    [ ] Frontend Design   production-grade UI components
-    [ ] Context Mode      context window optimization
-    [ ] Context7          library & framework docs lookup
-    [ ] Feature Dev       guided feature development
-    [ ] MongoDB           database ops, schema design, queries
-
-  ? Install scope
-    > This project        .claude/settings.local.json
-      Shared with team    .claude/settings.json (committed)
-      Global              ~/.claude/settings.json
 ```
 
 Pick what you need, choose the scope, done. No manual config editing.
