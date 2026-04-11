@@ -1,0 +1,26 @@
+{
+  "name": "cc-setup",
+  "version": "1.0.0",
+  "description": "Interactive CLI to add Claude Code plugins & MCP servers to any project",
+  "type": "module",
+  "bin": {
+    "cc-setup": "./index.mjs"
+  },
+  "author": {
+    "name": "BiswaViraj",
+    "url": "https://github.com/BiswaViraj"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "mcp",
+    "plugins",
+    "cli",
+    "setup"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "picocolors": "^1.1.1"
+  }
+}
