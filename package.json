@@ -10,6 +10,11 @@
     "name": "BiswaViraj",
     "url": "https://github.com/BiswaViraj"
   },
+  "homepage": "https://github.com/BiswaViraj/cc-setup#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BiswaViraj/cc-setup.git"
+  },
   "keywords": [
     "claude",
     "claude-code",
