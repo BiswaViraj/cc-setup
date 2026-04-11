@@ -4,8 +4,15 @@
   "description": "Add your preferred Claude Code plugins and MCP servers to any project in seconds",
   "type": "module",
   "bin": {
-    "cc-setup": "./index.mjs"
+    "cc-setup": "./dist/index.mjs"
   },
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "tsup"
+  },
+  "files": [
+    "dist"
+  ],
   "author": {
     "name": "BiswaViraj",
     "url": "https://github.com/BiswaViraj"
@@ -27,5 +34,10 @@
   "dependencies": {
     "@clack/prompts": "^0.11.0",
     "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsup": "^8.0.0",
+    "typescript": "^6.0.0"
   }
 }

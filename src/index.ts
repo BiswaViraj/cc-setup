@@ -7,10 +7,42 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import pc from "picocolors";
 
+// ── Types ───────────────────────────────────────────────────
+
+interface Plugin {
+  value: string;
+  label: string;
+  hint: string;
+  install: string;
+  marketplace?: string;
+}
+
+interface McpServer {
+  value: string;
+  label: string;
+  hint: string;
+  command: string;
+}
+
+interface UserConfig {
+  defaults?: string[];
+  plugins?: Plugin[];
+  mcpServers?: McpServer[];
+}
+
+interface RunResult {
+  ok: boolean;
+  output: string;
+}
+
+interface InstallResult extends RunResult {
+  name: string;
+}
+
 // ── Built-in Registry ───────────────────────────────────────
 // Popular plugins & servers. Users can extend via ~/.cc-setup.json
 
-const BUILTIN_PLUGINS = [
+const BUILTIN_PLUGINS: Plugin[] = [
   {
     value: "superpowers",
     label: "Superpowers",
@@ -51,22 +83,22 @@ const BUILTIN_PLUGINS = [
   },
 ];
 
-const BUILTIN_MCP = [];
+const BUILTIN_MCP: McpServer[] = [];
 
 // ── Config ──────────────────────────────────────────────────
 
 const CONFIG_PATH = join(homedir(), ".cc-setup.json");
 
-function loadConfig() {
+function loadConfig(): UserConfig | null {
   if (!existsSync(CONFIG_PATH)) return null;
   try {
-    return JSON.parse(readFileSync(CONFIG_PATH, "utf-8"));
+    return JSON.parse(readFileSync(CONFIG_PATH, "utf-8")) as UserConfig;
   } catch {
     return null;
   }
 }
 
-function merge(builtin, user) {
+function merge<T extends { value: string }>(builtin: T[], user?: T[]): T[] {
   if (!user?.length) return builtin;
   const seen = new Set(builtin.map((t) => t.value));
   return [...builtin, ...user.filter((t) => !seen.has(t.value))];
@@ -74,18 +106,25 @@ function merge(builtin, user) {
 
 // ── Helpers ─────────────────────────────────────────────────
 
-function run(cmd) {
+function run(cmd: string): RunResult {
   try {
     return {
       ok: true,
       output: execSync(cmd, { encoding: "utf-8", stdio: "pipe" }).trim(),
     };
   } catch (e) {
-    return { ok: false, output: (e.stderr || e.message).trim() };
+    const err = e as { stderr?: string; message: string };
+    return { ok: false, output: (err.stderr || err.message).trim() };
   }
 }
 
-function parseArgs() {
+interface CliArgs {
+  quick: boolean;
+  scope: string | null;
+  help: boolean;
+}
+
+function parseArgs(): CliArgs {
   const args = process.argv.slice(2);
   return {
     quick: args.includes("--quick") || args.includes("-q"),
@@ -96,7 +135,7 @@ function parseArgs() {
 
 // ── Main ────────────────────────────────────────────────────
 
-async function main() {
+async function main(): Promise<void> {
   const args = parseArgs();
 
   if (args.help) {
@@ -153,7 +192,7 @@ async function main() {
 
   // ── Select ────────────────────────────────────────────────
 
-  let selectedIds;
+  let selectedIds: string[];
 
   if (args.quick) {
     if (!defaults.length) {
@@ -163,13 +202,18 @@ async function main() {
     selectedIds = defaults;
     p.log.info(`Using defaults: ${defaults.map((d) => pc.cyan(d)).join(", ")}`);
   } else {
-    const groups = {};
+    const groups: Record<
+      string,
+      { value: string; label: string; hint: string }[]
+    > = {};
+
     if (plugins.length)
       groups["Plugins"] = plugins.map((t) => ({
         value: t.value,
         label: t.label,
         hint: t.hint,
       }));
+
     if (mcpServers.length)
       groups["MCP Servers"] = mcpServers.map((t) => ({
         value: t.value,
@@ -177,16 +221,18 @@ async function main() {
         hint: t.hint,
       }));
 
-    selectedIds = await p.groupMultiselect({
+    const result = await p.groupMultiselect({
       message: "Pick tools to add",
       options: groups,
       required: false,
     });
 
-    if (p.isCancel(selectedIds) || !selectedIds.length) {
+    if (p.isCancel(result) || !result.length) {
       p.cancel("Nothing selected.");
       process.exit(0);
     }
+
+    selectedIds = result as string[];
   }
 
   const pluginIds = selectedIds.filter((id) => pluginMap.has(id));
@@ -202,7 +248,7 @@ async function main() {
   let scope = args.scope;
 
   if (!scope) {
-    scope = await p.select({
+    const result = await p.select({
       message: "Install scope",
       options: [
         {
@@ -223,19 +269,21 @@ async function main() {
       ],
     });
 
-    if (p.isCancel(scope)) {
+    if (p.isCancel(result)) {
       p.cancel("Cancelled.");
       process.exit(0);
     }
+
+    scope = result as string;
   }
 
   // ── Install ───────────────────────────────────────────────
 
   const s = p.spinner();
-  const results = [];
+  const results: InstallResult[] = [];
 
   for (const id of pluginIds) {
-    const plugin = pluginMap.get(id);
+    const plugin = pluginMap.get(id)!;
 
     if (plugin.marketplace) {
       s.start(`Adding marketplace for ${plugin.label}...`);
@@ -250,7 +298,7 @@ async function main() {
   }
 
   for (const id of mcpIds) {
-    const mcp = mcpMap.get(id);
+    const mcp = mcpMap.get(id)!;
     s.start(`Adding ${mcp.label}...`);
     const result = run(
       `claude mcp add ${mcp.value} -s ${scope} -- ${mcp.command}`,
