@@ -81,6 +81,27 @@ const BUILTIN_PLUGINS: Plugin[] = [
     hint: "database ops, schema design, queries",
     install: "mongodb",
   },
+  {
+    value: "reviewloop",
+    label: "Reviewloop",
+    hint: "loop a PR to all-clear across every reviewer (Greptile, CodeRabbit, Copilot, humans)",
+    install: "reviewloop@agent-skills",
+    marketplace: "BiswaViraj/agent-skills",
+  },
+  {
+    value: "ciloop",
+    label: "Ciloop",
+    hint: "drive failing CI back to green — reproduce locally, fix, push, re-watch",
+    install: "ciloop@agent-skills",
+    marketplace: "BiswaViraj/agent-skills",
+  },
+  {
+    value: "standup",
+    label: "Standup",
+    hint: "paste-ready daily standup from your org-wide PRs",
+    install: "standup@agent-skills",
+    marketplace: "BiswaViraj/agent-skills",
+  },
 ];
 
 const BUILTIN_MCP: McpServer[] = [];
