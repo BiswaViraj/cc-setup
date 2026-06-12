@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import pc from "picocolors";
+import pkg from "../package.json";
 
 // ── Types ───────────────────────────────────────────────────
 
@@ -188,7 +189,7 @@ async function main(): Promise<void> {
   }
 
   console.clear();
-  p.intro(`${pc.bgCyan(pc.black(" cc-setup "))} ${pc.dim("v1.0.0")}`);
+  p.intro(`${pc.bgCyan(pc.black(" cc-setup "))} ${pc.dim(`v${pkg.version}`)}`);
 
   // Preflight
   const check = run("claude --version");
