@@ -86,21 +86,21 @@ const BUILTIN_PLUGINS: Plugin[] = [
     value: "reviewloop",
     label: "Reviewloop",
     hint: "loop a PR to all-clear across every reviewer (Greptile, CodeRabbit, Copilot, humans)",
-    install: "reviewloop@agent-skills",
+    install: "reviewloop@biswaviraj-skills",
     marketplace: "BiswaViraj/agent-skills",
   },
   {
     value: "ciloop",
     label: "Ciloop",
     hint: "drive failing CI back to green — reproduce locally, fix, push, re-watch",
-    install: "ciloop@agent-skills",
+    install: "ciloop@biswaviraj-skills",
     marketplace: "BiswaViraj/agent-skills",
   },
   {
     value: "standup",
     label: "Standup",
     hint: "paste-ready daily standup from your org-wide PRs",
-    install: "standup@agent-skills",
+    install: "standup@biswaviraj-skills",
     marketplace: "BiswaViraj/agent-skills",
   },
 ];
@@ -312,7 +312,7 @@ async function main(): Promise<void> {
       run(`claude plugins marketplace add ${plugin.marketplace}`);
       // `add` no-ops if the marketplace already exists, leaving a stale cache —
       // refresh it so newly added plugins resolve. Marketplace name is the part
-      // after "@" in the install ref (e.g. "reviewloop@agent-skills").
+      // after "@" in the install ref (e.g. "reviewloop@biswaviraj-skills").
       const marketplaceName = plugin.install.split("@")[1];
       if (marketplaceName) {
         run(`claude plugins marketplace update ${marketplaceName}`);
