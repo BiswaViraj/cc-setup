@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import * as p from "@clack/prompts";
-import { execSync } from "node:child_process";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -128,12 +129,14 @@ function merge<T extends { value: string }>(builtin: T[], user?: T[]): T[] {
 
 // ── Helpers ─────────────────────────────────────────────────
 
-function run(cmd: string): RunResult {
+const execAsync = promisify(exec);
+
+// Async so the @clack spinner keeps animating while the command runs
+// (execSync blocks the event loop → frozen spinner → looks stuck).
+async function run(cmd: string): Promise<RunResult> {
   try {
-    return {
-      ok: true,
-      output: execSync(cmd, { encoding: "utf-8", stdio: "pipe" }).trim(),
-    };
+    const { stdout } = await execAsync(cmd, { encoding: "utf-8" });
+    return { ok: true, output: stdout.trim() };
   } catch (e) {
     const err = e as { stderr?: string; message: string };
     return { ok: false, output: (err.stderr || err.message).trim() };
@@ -192,7 +195,7 @@ async function main(): Promise<void> {
   p.intro(`${pc.bgCyan(pc.black(" cc-setup "))} ${pc.dim(`v${pkg.version}`)}`);
 
   // Preflight
-  const check = run("claude --version");
+  const check = await run("claude --version");
   if (!check.ok) {
     p.cancel(
       "Claude Code CLI not found. Install: npm i -g @anthropic-ai/claude-code",
@@ -309,19 +312,19 @@ async function main(): Promise<void> {
 
     if (plugin.marketplace) {
       s.start(`Adding marketplace for ${plugin.label}...`);
-      run(`claude plugins marketplace add ${plugin.marketplace}`);
+      await run(`claude plugins marketplace add ${plugin.marketplace}`);
       // `add` no-ops if the marketplace already exists, leaving a stale cache —
       // refresh it so newly added plugins resolve. Marketplace name is the part
       // after "@" in the install ref (e.g. "reviewloop@biswaviraj-skills").
       const marketplaceName = plugin.install.split("@")[1];
       if (marketplaceName) {
-        run(`claude plugins marketplace update ${marketplaceName}`);
+        await run(`claude plugins marketplace update ${marketplaceName}`);
       }
       s.stop(`Marketplace ready for ${plugin.label}`);
     }
 
     s.start(`Installing ${plugin.label}...`);
-    const result = run(`claude plugins install ${plugin.install} -s ${scope}`);
+    const result = await run(`claude plugins install ${plugin.install} -s ${scope}`);
     s.stop(`${result.ok ? pc.green("✓") : pc.yellow("⚠")} ${plugin.label}`);
     results.push({ name: plugin.label, ...result });
   }
@@ -329,7 +332,7 @@ async function main(): Promise<void> {
   for (const id of mcpIds) {
     const mcp = mcpMap.get(id)!;
     s.start(`Adding ${mcp.label}...`);
-    const result = run(
+    const result = await run(
       `claude mcp add ${mcp.value} -s ${scope} -- ${mcp.command}`,
     );
     s.stop(`${result.ok ? pc.green("✓") : pc.yellow("⚠")} ${mcp.label}`);
