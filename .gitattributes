@@ -1,0 +1,3 @@
+# Force .ts files to count as TypeScript. Linguist otherwise reads the
+# `#!/usr/bin/env node` shebang in src/index.ts and mislabels it JavaScript.
+*.ts linguist-language=TypeScript
