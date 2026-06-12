@@ -309,6 +309,13 @@ async function main(): Promise<void> {
     if (plugin.marketplace) {
       s.start(`Adding marketplace for ${plugin.label}...`);
       run(`claude plugins marketplace add ${plugin.marketplace}`);
+      // `add` no-ops if the marketplace already exists, leaving a stale cache —
+      // refresh it so newly added plugins resolve. Marketplace name is the part
+      // after "@" in the install ref (e.g. "reviewloop@agent-skills").
+      const marketplaceName = plugin.install.split("@")[1];
+      if (marketplaceName) {
+        run(`claude plugins marketplace update ${marketplaceName}`);
+      }
       s.stop(`Marketplace ready for ${plugin.label}`);
     }
 
