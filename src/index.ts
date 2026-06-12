@@ -84,24 +84,10 @@ const BUILTIN_PLUGINS: Plugin[] = [
     install: "mongodb",
   },
   {
-    value: "reviewloop",
-    label: "Reviewloop",
-    hint: "loop a PR to all-clear across every reviewer (Greptile, CodeRabbit, Copilot, humans)",
-    install: "reviewloop@biswaviraj-skills",
-    marketplace: "BiswaViraj/agent-skills",
-  },
-  {
-    value: "ciloop",
-    label: "Ciloop",
-    hint: "drive failing CI back to green — reproduce locally, fix, push, re-watch",
-    install: "ciloop@biswaviraj-skills",
-    marketplace: "BiswaViraj/agent-skills",
-  },
-  {
-    value: "standup",
-    label: "Standup",
-    hint: "paste-ready daily standup from your org-wide PRs",
-    install: "standup@biswaviraj-skills",
+    value: "biswaviraj-skills",
+    label: "Biswaviraj's Skills",
+    hint: "reviewloop (clear PR reviews) + ciloop (fix red CI) + standup (daily standup)",
+    install: "skills@biswaviraj-skills",
     marketplace: "BiswaViraj/agent-skills",
   },
 ];
