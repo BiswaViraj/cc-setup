@@ -87,7 +87,7 @@ const BUILTIN_PLUGINS: Plugin[] = [
     value: "biswaviraj-skills",
     label: "Biswaviraj's Skills",
     hint: "reviewloop (clear PR reviews) + ciloop (fix red CI) + standup (daily standup)",
-    install: "skills@biswaviraj-skills",
+    install: "agent-workflows@biswaviraj-skills",
     marketplace: "BiswaViraj/agent-skills",
   },
 ];
